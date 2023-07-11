@@ -1,3 +1,3 @@
-export enum RequestTypes {
+export enum RequestTypesEnum {
   REG = 'reg',
 }
