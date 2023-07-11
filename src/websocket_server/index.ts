@@ -9,12 +9,11 @@ const createWSServer = (port: number) => {
     });
 
     ws.on("message", (message: string) => {
-      console.log("Received a message: ", message);
-
-      ws.send(`Server received a message: ${message}`);
+      const request = JSON.parse(message.toString());
+      console.log(request);
     });
 
-    ws.send("Welcome to the server");
+    console.log('pewpewpew');
   });
 };
 
