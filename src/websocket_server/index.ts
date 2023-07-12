@@ -2,9 +2,10 @@ import WebSocket, { WebSocketServer } from "ws";
 import { coloredText } from "../helpers/coloredText";
 import { RegisterUserType, RequestType } from "../utils/types";
 import { RequestTypesEnum } from "../utils/enums";
-import { allUsers, getIdPlayer } from "../models/db";
+import { allUsers, checkUserName, getIdPlayer } from "../models/db";
 import { User } from "../models/user";
 import { registrPlayer } from "../helpers/registration";
+import { sendError } from "../helpers/sendError";
 
 const createWSServer = (port: number) => {
   const wss = new WebSocketServer({ port });
@@ -26,8 +27,13 @@ const createWSServer = (port: number) => {
         switch (type) {
           case RequestTypesEnum.REG: {
             const user: RegisterUserType = parsedData;
-            allUsers.push(new User(ws, user.name, user.password, getIdPlayer()));
-            registrPlayer(ws, user);
+            if (checkUserName(user.name)) {
+              sendError(ws, RequestTypesEnum.REG, 'User already exist');
+              console.log(`User ${coloredText(user.name, 'green')} already exist`)
+            } else {
+              allUsers.push(new User(ws, user.name, user.password, getIdPlayer()));
+              registrPlayer(ws, user);
+            }
             break;
           }
           default:
