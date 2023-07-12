@@ -33,6 +33,7 @@ const createWSServer = (port: number) => {
             } else {
               allUsers.push(new User(ws, user.name, user.password, getIdPlayer()));
               registrPlayer(ws, user);
+              console.log('User added');
             }
             break;
           }
