@@ -15,7 +15,7 @@ export const createRoom = (ws: WebSocketAdvanced) => {
       idGame: createdRoom.idGame,
       idPlayer: ws.playerId
     });
-
+    console.log(createdRoom, 'CREATED')
     ws.send(response);
   }
 };
@@ -25,7 +25,7 @@ export const getFreeRooms = () => {
   allRooms.forEach((elem) => {
     const userInfo: RoomUserInfo[] = [
       {
-        name: allUsers[elem.idPlayer]!.name,
+        name: allUsers[elem.idPlayer - 1]!.name,
         index: elem.idPlayer
       }
     ];
