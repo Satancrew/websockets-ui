@@ -31,3 +31,8 @@ export type UpdateRoom = {
   roomId: number;
   roomUsers: RoomUserInfo[];
 }
+
+export type WinnersType = {
+  name: string;
+  wins: number;
+}
