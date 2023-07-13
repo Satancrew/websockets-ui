@@ -11,7 +11,6 @@ import { checkPlayersStatus } from "../helpers/checkPlayersStatus";
 
 const createWSServer = (port: number) => {
   const wss = new WebSocketServer({ port });
-  console.log(typeof wss);
 
   wss.on("connection", (ws: WebSocketAdvanced) => {
     ws.on("error", (err) => {
@@ -22,7 +21,7 @@ const createWSServer = (port: number) => {
       console.log(JSON.parse(message), 'MESSAGE');
       const request: RequestType = JSON.parse(message.toString());
       const { type, data, id } = request;
-      console.log(request)
+
       request.id = getIdPlayer();
 
       console.log(`Type of message: ${coloredText(type, "green")}`);
@@ -43,7 +42,6 @@ const createWSServer = (port: number) => {
               allUsers.push(new User(ws, user.name, user.password, request.id));
               registrPlayer(ws, user, request.id);
               checkPlayersStatus(wss);
-              console.log(getFreeRooms(), 'FREE ROOOOOOOMS');
             }
 
             break;
