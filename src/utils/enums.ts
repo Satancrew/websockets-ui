@@ -3,4 +3,5 @@ export enum RequestTypesEnum {
   CREATE_ROOM = "create_room",
   CREATE_GAME = "create_game",
   UPDATE_R = "update_room",
+  UPDATE_W = "update_winners",
 }
