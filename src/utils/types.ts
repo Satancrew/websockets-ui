@@ -12,6 +12,12 @@ export type RegisterUserType = {
   password: string;
 }
 
-export type WebSocketType = WebSocket & {
-  idPlayer: number;
+export type WebSocketAdvanced = WebSocket & {
+  playerId: number;
+  gameId: number;
 }
+
+export type Room = {
+  idGame: number;
+  idPlayer: number;
+};
