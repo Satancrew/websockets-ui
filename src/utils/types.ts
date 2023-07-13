@@ -21,3 +21,13 @@ export type Room = {
   idGame: number;
   idPlayer: number;
 };
+
+export type RoomUserInfo = {
+  name: string;
+  index: number;
+}
+
+export type UpdateRoom = {
+  roomId: number;
+  roomUsers: RoomUserInfo[];
+}

@@ -6,10 +6,12 @@ import { allUsers, checkUserName, getIdPlayer } from "../models/db";
 import { User } from "../models/user";
 import { registrPlayer } from "../helpers/registrPlayer";
 import { sendError } from "../helpers/sendError";
-import { createRoom } from "../models/rooms";
+import { createRoom, getFreeRooms } from "../models/rooms";
+import { checkPlayersStatus } from "../helpers/checkPlayersStatus";
 
 const createWSServer = (port: number) => {
   const wss = new WebSocketServer({ port });
+  console.log(typeof wss);
 
   wss.on("connection", (ws: WebSocketAdvanced) => {
     ws.on("error", (err) => {
@@ -39,8 +41,9 @@ const createWSServer = (port: number) => {
               console.log(`User ${coloredText(user.name, "green")} already exist`);
             } else {
               allUsers.push(new User(ws, user.name, user.password, request.id));
-              console.log(allUsers, 'ALLUSERS!!!')
               registrPlayer(ws, user, request.id);
+              checkPlayersStatus(wss);
+              console.log(getFreeRooms(), 'FREE ROOOOOOOMS');
             }
 
             break;
@@ -48,7 +51,6 @@ const createWSServer = (port: number) => {
 
           case RequestTypesEnum.CREATE_ROOM: {
             createRoom(ws);
-
             break;
           }
           default:
@@ -58,7 +60,6 @@ const createWSServer = (port: number) => {
         console.log(error, "error!!!!!!");
       }
     });
-
     console.log("pewpewpew");
   });
 };
