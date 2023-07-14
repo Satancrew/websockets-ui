@@ -1,12 +1,12 @@
 import WebSocket, { WebSocketServer } from "ws";
 import { coloredText } from "../helpers/coloredText";
-import { RegisterUserType, RequestType, WebSocketAdvanced } from "../utils/types";
+import { AddUserToRoomType, RegisterUserType, RequestType, WebSocketAdvanced } from "../utils/types";
 import { RequestTypesEnum } from "../utils/enums";
-import { allUsers, checkUserName, getIdPlayer } from "../models/db";
+import { allUsers, checkUserId, checkUserName, getIdPlayer } from "../models/db";
 import { User } from "../models/user";
 import { registrPlayer } from "../helpers/registrPlayer";
 import { sendError } from "../helpers/sendError";
-import { createRoom, getFreeRooms } from "../models/rooms";
+import { createRoom, findUserInRoom, getFreeRooms } from "../models/rooms";
 import { checkPlayersStatus } from "../helpers/checkPlayersStatus";
 
 const createWSServer = (port: number) => {
@@ -18,7 +18,7 @@ const createWSServer = (port: number) => {
     });
 
     ws.on("message", (message: string) => {
-      console.log(JSON.parse(message), 'MESSAGE');
+
       const request: RequestType = JSON.parse(message.toString());
       const { type, data, id } = request;
 
@@ -49,6 +49,17 @@ const createWSServer = (port: number) => {
 
           case RequestTypesEnum.CREATE_ROOM: {
             createRoom(ws);
+            break;
+          }
+
+          case RequestTypesEnum.ADD_PLAYER: {
+            console.log('add user to this room');
+            const roomId: AddUserToRoomType = JSON.parse(request.data);
+            const users = [
+              findUserInRoom(roomId.indexRoom),
+              checkUserId('', ws)
+            ]
+            console.log(users);
             break;
           }
           default:

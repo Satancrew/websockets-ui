@@ -36,3 +36,12 @@ export type WinnersType = {
   name: string;
   wins: number;
 }
+
+export type AddUserToRoomType = {
+  indexRoom: number;
+}
+
+export type GameType = {
+  idGame: number;
+  idPlayer: number;
+}

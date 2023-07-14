@@ -6,7 +6,6 @@ import { allUsers, findUserById } from "./db";
 export const allRooms: Room[] = [];
 
 export const createRoom = (ws: WebSocketAdvanced) => {
-  const user = findUserById(ws.playerId);
   if (allRooms.findIndex((elem) => elem.idPlayer === ws.playerId) < 0) {
     const createdRoom: Room = { idGame: allRooms.length + 1, idPlayer: ws.playerId };
     allRooms.push(createdRoom);
@@ -15,7 +14,7 @@ export const createRoom = (ws: WebSocketAdvanced) => {
       idGame: createdRoom.idGame,
       idPlayer: ws.playerId
     });
-    console.log(createdRoom, 'CREATED')
+    
     ws.send(response);
   }
 };
@@ -36,3 +35,9 @@ export const getFreeRooms = () => {
   });
   return [...freeRooms]
 };
+
+export const findUserInRoom = (roomId: number) => {
+  const id = allRooms.findIndex((elem) => elem.idGame === roomId);
+  const userId = allRooms[id]?.idPlayer;
+  return userId;
+}
