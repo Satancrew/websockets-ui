@@ -13,17 +13,21 @@ export const checkUserName = (name: string): boolean => {
   return !!isCheck;
 };
 
-export const checkUserId = (name: string, ws?: WebSocket) => {
-  return ws
-    ? allUsers.findIndex((elem) => Object.is(elem.ws, ws))
-    : allUsers.findIndex((elem) => elem.name === name);
+export const checkUserId = (id: number) => {
+  const findedUser = allUsers.find((elem) => elem && elem.idPlayer === id);
+
+  if (findedUser) {
+    return findedUser;
+  } else {
+    console.log(coloredText("User not found", "red"));
+  }
 };
 
 export const findUserById = (id: number): User | undefined => {
   const user = allUsers.find((elem) => elem.idPlayer === id);
 
   if (user === undefined) {
-    console.log(`User with id - ${coloredText(id.toString(), 'blue')} not found`);
+    console.log(`User with id - ${coloredText(id.toString(), "blue")} not found`);
   } else {
     return user;
   }

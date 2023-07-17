@@ -37,6 +37,7 @@ const createWSServer = (port: number) => {
             console.log(`Data: ${coloredText(JSON.stringify(parsedData), "blue")}`);
 
             const user: RegisterUserType = parsedData;
+            console.log(user, 'USER');
 
             if (checkUserName(user.name)) {
               sendError(ws, RequestTypesEnum.REG, "User already exist");
@@ -44,7 +45,7 @@ const createWSServer = (port: number) => {
             } else {
               allUsers.push(new User(ws, user.name, user.password, request.id));
               registrPlayer(ws, user, request.id);
-              console.log(allUsers);
+              console.log(allUsers, 'allUsers');
               checkPlayersStatus(wss);
             }
 
@@ -53,24 +54,23 @@ const createWSServer = (port: number) => {
 
           case RequestTypesEnum.CREATE_ROOM: {
             createRoom(ws);
+            checkPlayersStatus(wss);
             break;
           }
 
           case RequestTypesEnum.ADD_PLAYER: {
-            console.log("add user to this room");
             const roomId: AddUserToRoomType = JSON.parse(request.data);
-            const users = [findUserInRoom(roomId.indexRoom), checkUserId("", ws)];
-            users.length > 2 ? console.log("dohuya naroda") : console.log(users);
+            const users = [findUserInRoom(roomId.indexRoom), checkUserId(ws.playerId)];
+            console.log(users, 'USERS');
             break;
           }
           default:
-            console.log(coloredText('Unknown command', 'blue'));
+            break;
         }
       } catch (error) {
-        console.log(error, "error!!!!!!");
+        coloredText('Error!', 'red');
       }
     });
-    console.log("pewpewpew");
   });
 };
 

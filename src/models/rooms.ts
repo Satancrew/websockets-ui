@@ -14,7 +14,7 @@ export const createRoom = (ws: WebSocketAdvanced) => {
       idGame: createdRoom.idGame,
       idPlayer: ws.playerId
     });
-    
+
     ws.send(response);
   }
 };
@@ -38,6 +38,6 @@ export const getFreeRooms = () => {
 
 export const findUserInRoom = (roomId: number) => {
   const id = allRooms.findIndex((elem) => elem.idGame === roomId);
-  const userId = allRooms[id]?.idPlayer;
+  const userId = allRooms[id]!.idPlayer;
   return userId;
 }
