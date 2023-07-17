@@ -17,7 +17,7 @@ export const checkUserId = (id: number) => {
   const findedUser = allUsers.find((elem) => elem && elem.idPlayer === id);
 
   if (findedUser) {
-    return findedUser;
+    return findedUser.idPlayer;
   } else {
     console.log(coloredText("User not found", "red"));
   }

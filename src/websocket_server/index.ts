@@ -1,4 +1,4 @@
-import WebSocket, { WebSocketServer } from "ws";
+import { WebSocketServer } from "ws";
 import { coloredText } from "../helpers/coloredText";
 import {
   AddUserToRoomType,
@@ -11,8 +11,11 @@ import { allUsers, checkUserId, checkUserName, getIdPlayer } from "../models/db"
 import { User } from "../models/user";
 import { registrPlayer } from "../helpers/registrPlayer";
 import { sendError } from "../helpers/sendError";
-import { createRoom, findUserInRoom, getFreeRooms } from "../models/rooms";
+import { createRoom, findUserInRoom } from "../models/rooms";
 import { checkPlayersStatus } from "../helpers/checkPlayersStatus";
+import { createNewGame, findBoard } from "../models/games";
+import { addUserToRoom } from "../helpers/addUserToRoom";
+import { sendResponse } from "../helpers/sendResponse";
 
 const createWSServer = (port: number) => {
   const wss = new WebSocketServer({ port });
@@ -37,7 +40,6 @@ const createWSServer = (port: number) => {
             console.log(`Data: ${coloredText(JSON.stringify(parsedData), "blue")}`);
 
             const user: RegisterUserType = parsedData;
-            console.log(user, 'USER');
 
             if (checkUserName(user.name)) {
               sendError(ws, RequestTypesEnum.REG, "User already exist");
@@ -45,7 +47,6 @@ const createWSServer = (port: number) => {
             } else {
               allUsers.push(new User(ws, user.name, user.password, request.id));
               registrPlayer(ws, user, request.id);
-              console.log(allUsers, 'allUsers');
               checkPlayersStatus(wss);
             }
 
@@ -60,15 +61,18 @@ const createWSServer = (port: number) => {
 
           case RequestTypesEnum.ADD_PLAYER: {
             const roomId: AddUserToRoomType = JSON.parse(request.data);
-            const users = [findUserInRoom(roomId.indexRoom), checkUserId(ws.playerId)];
-            console.log(users, 'USERS');
+            const users = [findUserInRoom(roomId.indexRoom), checkUserId(ws.playerId)!];
+            const game = createNewGame(users);
+            addUserToRoom(game, users[1]!, ws);
+            checkPlayersStatus(wss);
+
             break;
           }
           default:
             break;
         }
       } catch (error) {
-        coloredText('Error!', 'red');
+        console.log(coloredText("Error!", "red"));
       }
     });
   });

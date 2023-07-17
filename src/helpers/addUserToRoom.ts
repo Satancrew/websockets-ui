@@ -1,6 +1,12 @@
-import { AddUserToRoomType } from "../utils/types";
-import { WebSocketServer } from "ws";
+import { RequestTypesEnum } from "../utils/enums"
+import { sendResponse } from "./sendResponse"
+import { WebSocketAdvanced } from "../utils/types"
 
-// export const addUserToRoom = (wss: WebSocketServer, roomId: AddUserToRoomType, data: string ) => {
-//   const roomIndex = d
-// }
+export const addUserToRoom = (game: number, user: number, ws: WebSocketAdvanced) => {
+  const response = sendResponse(RequestTypesEnum.CREATE_GAME,  {
+    idGame: game,
+    idPlayer: user
+  })
+
+  ws.send(response)
+}
