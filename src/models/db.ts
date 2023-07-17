@@ -1,4 +1,3 @@
-import { WebSocket } from "ws";
 import { User } from "./user";
 import { coloredText } from "../helpers/coloredText";
 

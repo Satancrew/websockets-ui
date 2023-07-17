@@ -1,7 +1,7 @@
 import { Room, RoomUserInfo, UpdateRoom, WebSocketAdvanced } from "../utils/types";
 import { sendResponse } from "../helpers/sendResponse";
 import { RequestTypesEnum } from "../utils/enums";
-import { allUsers, findUserById } from "./db";
+import { allUsers } from "./db";
 
 export const allRooms: Room[] = [];
 

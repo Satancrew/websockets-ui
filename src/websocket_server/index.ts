@@ -15,7 +15,6 @@ import { createRoom, findUserInRoom } from "../models/rooms";
 import { checkPlayersStatus } from "../helpers/checkPlayersStatus";
 import { createNewGame, findBoard } from "../models/games";
 import { addUserToRoom } from "../helpers/addUserToRoom";
-import { sendResponse } from "../helpers/sendResponse";
 
 const createWSServer = (port: number) => {
   const wss = new WebSocketServer({ port });
