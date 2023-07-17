@@ -43,5 +43,6 @@ export type AddUserToRoomType = {
 
 export type GameType = {
   idGame: number;
-  idPlayer: number;
+  idFirstPlayer: number;
+  idSecondPlayer: number;
 }

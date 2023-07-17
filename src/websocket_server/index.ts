@@ -1,6 +1,11 @@
 import WebSocket, { WebSocketServer } from "ws";
 import { coloredText } from "../helpers/coloredText";
-import { AddUserToRoomType, RegisterUserType, RequestType, WebSocketAdvanced } from "../utils/types";
+import {
+  AddUserToRoomType,
+  RegisterUserType,
+  RequestType,
+  WebSocketAdvanced
+} from "../utils/types";
 import { RequestTypesEnum } from "../utils/enums";
 import { allUsers, checkUserId, checkUserName, getIdPlayer } from "../models/db";
 import { User } from "../models/user";
@@ -18,7 +23,6 @@ const createWSServer = (port: number) => {
     });
 
     ws.on("message", (message: string) => {
-
       const request: RequestType = JSON.parse(message.toString());
       const { type, data, id } = request;
 
@@ -29,7 +33,6 @@ const createWSServer = (port: number) => {
       try {
         switch (type) {
           case RequestTypesEnum.REG: {
-
             const parsedData = JSON.parse(data.toString());
             console.log(`Data: ${coloredText(JSON.stringify(parsedData), "blue")}`);
 
@@ -41,6 +44,7 @@ const createWSServer = (port: number) => {
             } else {
               allUsers.push(new User(ws, user.name, user.password, request.id));
               registrPlayer(ws, user, request.id);
+              console.log(allUsers);
               checkPlayersStatus(wss);
             }
 
@@ -53,17 +57,14 @@ const createWSServer = (port: number) => {
           }
 
           case RequestTypesEnum.ADD_PLAYER: {
-            console.log('add user to this room');
+            console.log("add user to this room");
             const roomId: AddUserToRoomType = JSON.parse(request.data);
-            const users = [
-              findUserInRoom(roomId.indexRoom),
-              checkUserId('', ws)
-            ]
-            console.log(users);
+            const users = [findUserInRoom(roomId.indexRoom), checkUserId("", ws)];
+            users.length > 2 ? console.log("dohuya naroda") : console.log(users);
             break;
           }
           default:
-            console.log("default owo");
+            console.log(coloredText('Unknown command', 'blue'));
         }
       } catch (error) {
         console.log(error, "error!!!!!!");
